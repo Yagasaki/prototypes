@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+        }
+
+        .summary-card h3 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .summary-card.gain {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .summary-card.loss {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .portfolio-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .portfolio-section h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .portfolio-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .portfolio-table thead {
+            background: #f8f9fa;
+        }
+
+        .portfolio-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .portfolio-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .portfolio-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .ticker {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .amount {
+            color: #333;
+        }
+
+        .positive {
+            color: #11998e;
+            font-weight: 600;
+        }
+
+        .negative {
+            color: #eb3349;
+            font-weight: 600;
+        }
+
+        .neutral {
+            color: #999;
+        }
+
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-section h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .pie-chart {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .pie-visual {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #667eea 0deg 72deg,
+                #764ba2 72deg 144deg,
+                #f093fb 144deg 216deg,
+                #4facfe 216deg 288deg,
+                #00f2fe 288deg 360deg
+            );
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .color-1 { background: #667eea; }
+        .color-2 { background: #764ba2; }
+        .color-3 { background: #f093fb; }
+        .color-4 { background: #4facfe; }
+        .color-5 { background: #00f2fe; }
+
+        .update-note {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-table {
+                font-size: 12px;
+            }
+
+            .portfolio-table th,
+            .portfolio-table td {
+                padding: 10px;
+            }
+
+            .pie-chart {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .summary-card .value {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Investment Portfolio</h1>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Gesamtvermögen (Marktwert)</h3>
+                    <div class="value" id="totalMarketValue">€189.450</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Gesamter Kaufwert</h3>
+                    <div class="value" id="totalCostBasis">€165.200</div>
+                </div>
+                <div class="summary-card gain" id="gainCard">
+                    <h3>Gewinn / Verlust</h3>
+                    <div class="value" id="totalGain">+€24.250</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Gewinn / Verlust %</h3>
+                    <div class="value" id="totalGainPercent">+14.7%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-section">
+            <h2>Positionen</h2>
+            
+            <table class="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Titel</th>
+                        <th>Menge</th>
+                        <th>Kaufwert</th>
+                        <th>Preis</th>
+                        <th>Marktwert</th>
+                        <th>Gewinn/Verlust</th>
+                        <th>Gewinn/Verlust %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ticker">AAPL</td>
+                        <td class="amount">45</td>
+                        <td>€150,00</td>
+                        <td>€195,50 <span class="positive">↑</span></td>
+                        <td>€8.797,50</td>
+                        <td class="positive">+€2.047,50</td>
+                        <td class="positive">+30,3%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">MSFT</td>
+                        <td class="amount">32</td>
+                        <td>€300,00</td>
+                        <td>€420,75 <span class="positive">↑</span></td>
+                        <td>€13.464,00</td>
+                        <td class="positive">+€3.864,00</td>
+                        <td class="positive">+40,2%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">VOO</td>
+                        <td class="amount">120</td>
+                        <td>€380,00</td>
+                        <td>€385,20 <span class="positive">↑</span></td>
+                        <td>€46.224,00</td>
+                        <td class="positive">+€624,00</td>
+                        <td class="positive">+1,4%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">NVDA</td>
+                        <td class="amount">18</td>
+                        <td>€650,00</td>
+                        <td>€920,00 <span class="positive">↑</span></td>
+                        <td>€16.560,00</td>
+                        <td class="positive">+€4.860,00</td>
+                        <td class="positive">+41,5%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">BND</td>
+                        <td class="amount">200</td>
+                        <td>€77,00</td>
+                        <td>€75,80 <span class="negative">↓</span></td>
+                        <td>€15.160,00</td>
+                        <td class="negative">−€240,00</td>
+                        <td class="negative">−1,6%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">VGOV</td>
+                        <td class="amount">150</td>
+                        <td>€80,00</td>
+                        <td>€82,15 <span class="positive">↑</span></td>
+                        <td>€12.322,50</td>
+                        <td class="positive">+€322,50</td>
+                        <td class="positive">+2,7%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">BTC</td>
+                        <td class="amount">0,45</td>
+                        <td>€45.000,00</td>
+                        <td>€98.500,00 <span class="positive">↑</span></td>
+                        <td>€44.325,00</td>
+                        <td class="positive">+€24.075,00</td>
+                        <td class="positive">+119,2%</td>
+                    </tr>
+                    <tr>
+                        <td class="ticker">GOLD</td>
+                        <td class="amount">10</td>
+                        <td>€1.875,00</td>
+                        <td>€1.950,00 <span class="positive">↑</span></td>
+                        <td>€19.500,00</td>
+                        <td class="positive">+€750,00</td>
+                        <td class="positive">+4,0%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="update-note">
+                📊 Kurse aktualisiert vor 2 Minuten · Alle Werte in Euro
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <h2>Portfolio Verteilung</h2>
+            
+            <div class="pie-chart">
+                <div class="pie-visual"></div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color color-1"></div>
+                        <span>AAPL (4,6%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color color-2"></div>
+                        <span>MSFT (7,1%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color color-3"></div>
+                        <span>VOO (24,4%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color color-4"></div>
+                        <span>NVDA (8,7%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color color-5"></div>
+                        <span>BTC (23,4%) + Sonstige (31,8%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulierte Live-Updates
+        setInterval(() => {
+            const positions = [
+                { ticker: 'AAPL', priceElement: 1, changePercent: 0.3 },
+                { ticker: 'MSFT', priceElement: 4, changePercent: 0.25 },
+                { ticker: 'VOO', priceElement: 7, changePercent: 0.15 },
+                { ticker: 'NVDA', priceElement: 10, changePercent: 0.5 },
+                { ticker: 'BTC', priceElement: 19, changePercent: 2 }
+            ];
+
+            positions.forEach(pos => {
+                const priceCell = document.querySelectorAll('.portfolio-table td')[pos.priceElement];
+                if (priceCell) {
+                    // Kleine zufällige Schwankung
+                    const randomChange = (Math.random() - 0.5) * 0.02;
+                    priceCell.style.animation = 'none';
+                    setTimeout(() => {
+                        priceCell.style.animation = 'highlight 0.5s ease';
+                    }, 10);
+                }
+            });
+        }, 8000);
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes highlight {
+                0% { background-color: #fff3cd; }
+                100% { background-color: transparent; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
