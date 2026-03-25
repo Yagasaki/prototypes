@@ -86,9 +86,15 @@
             margin-bottom: 20px;
         }
 
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .portfolio-table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 800px;
         }
 
         .portfolio-table thead {
@@ -259,6 +265,7 @@
         <div class="portfolio-section">
             <h2>Positionen</h2>
             
+            <div class="table-wrapper">
             <table class="portfolio-table">
                 <thead>
                     <tr>
@@ -346,6 +353,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
 
             <div class="update-note">
                 📊 Kurse aktualisiert vor 2 Minuten · Alle Werte in Euro
