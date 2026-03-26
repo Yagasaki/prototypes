@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunch Event Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --primary-foreground: #f1f5f9;
+            --secondary: #64748b;
+            --secondary-foreground: #f1f5f9;
+            --accent: #16a34a;
+            --accent-hover: #15803d;
+            --accent-light: #dcfce7;
+            --border: #e2e8f0;
+            --input: #f8fafc;
+            --muted: #f1f5f9;
+            --muted-foreground: #64748b;
+            --background: #ffffff;
+            --foreground: #0f172a;
+            --warning: #ea580c;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--primary-foreground);
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        .badge {
+            background-color: var(--accent);
+            color: white;
+            border-radius: 9999px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 4px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        /* Page sections */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--muted-foreground);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .event-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--background);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.1);
+        }
+
+        .event-header {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            padding: 24px;
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .event-date {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .event-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .event-time {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .event-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-location {
+            color: var(--muted-foreground);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .event-cuisine {
+            background-color: var(--accent-light);
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--muted-foreground);
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .event-description {
+            color: var(--muted-foreground);
+            font-size: 14px;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--muted);
+            color: var(--foreground);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Signup Modal */
+        .signup-form {
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 600px;
+        }
+
+        /* My Registrations */
+        .registrations-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .registration-item {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            background-color: var(--background);
+        }
+
+        .registration-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .registration-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .registration-status {
+            background-color: var(--accent-light);
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .registration-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item {
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: var(--muted-foreground);
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted-foreground);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background-color: var(--muted);
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--muted-foreground);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--muted-foreground);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .registration-details {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <div class="header-content">
+                <div class="logo">🍽️ Lunch Events</div>
+                <nav class="nav-links">
+                    <a onclick="showPage('events')">Browse Events</a>
+                    <a onclick="showPage('registrations')">
+                        My Registrations
+                        <span class="badge" id="registration-count" style="display: none;">0</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Events Page -->
+            <div class="page active" id="events-page">
+                <h1>Upcoming Lunch Events</h1>
+                <p class="subtitle">Discover and join team lunch gatherings</p>
+                <div class="events-grid" id="events-grid"></div>
+            </div>
+
+            <!-- Event Details / Signup Page -->
+            <div class="page" id="event-detail-page">
+                <div id="event-detail-content"></div>
+            </div>
+
+            <!-- My Registrations Page -->
+            <div class="page" id="registrations-page">
+                <h1>My Registrations</h1>
+                <p class="subtitle">Manage your lunch event sign-ups</p>
+                <div id="registrations-content"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Lunch Event Planner. Brought to you by the team.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Mock data
+        const lunchEvents = [
+            {
+                id: 1,
+                title: 'Italian Pasta Social',
+                date: 'March 28, 2026',
+                time: '12:00 PM - 1:30 PM',
+                location: 'Office Cafeteria',
+                cuisine: 'Italian',
+                description: 'Join us for a casual lunch featuring fresh pasta dishes. Perfect time to catch up with colleagues.',
+                capacity: 30,
+                registered: 18,
+                organizer: 'HR Team'
+            },
+            {
+                id: 2,
+                title: 'Asian Fusion Lunch',
+                date: 'April 2, 2026',
+                time: '12:00 PM - 1:30 PM',
+                location: 'Meeting Room A',
+                cuisine: 'Asian Fusion',
+                description: 'Explore delicious Asian fusion flavors. Sign up early as spots fill quickly!',
+                capacity: 25,
+                registered: 22,
+                organizer: 'Marketing Team'
+            },
+            {
+                id: 3,
+                title: 'Mediterranean Mezze Platter',
+                date: 'April 8, 2026',
+                time: '12:15 PM - 1:45 PM',
+                location: 'Terrace Area',
+                cuisine: 'Mediterranean',
+                description: 'A wonderful selection of Mediterranean appetizers and dishes. Weather permitting on the terrace.',
+                capacity: 35,
+                registered: 12,
+                organizer: 'Operations'
+            },
+            {
+                id: 4,
+                title: 'Mexican Taco Tuesday',
+                date: 'April 15, 2026',
+                time: '12:00 PM - 1:30 PM',
+                location: 'Main Hall',
+                cuisine: 'Mexican',
+                description: 'Taco bar with all the fixings. Vegetarian options available. Fiesta time!',
+                capacity: 40,
+                registered: 28,
+                organizer: 'Sales Team'
+            },
+            {
+                id: 5,
+                title: 'French Bistro Lunch',
+                date: 'April 22, 2026',
+                time: '12:30 PM - 2:00 PM',
+                location: 'Conference Room B',
+                cuisine: 'French',
+                description: 'Classic French bistro fare. An elegant lunch experience for the team.',
+                capacity: 20,
+                registered: 8,
+                organizer: 'Executive Team'
+            },
+            {
+                id: 6,
+                title: 'Vegetarian & Vegan Showcase',
+                date: 'April 29, 2026',
+                time: '12:00 PM - 1:30 PM',
+                location: 'Office Cafeteria',
+                cuisine: 'Plant-Based',
+                description: 'A celebration of plant-based cuisine. All options are vegetarian and vegan-friendly.',
+                capacity: 30,
+                registered: 15,
+                organizer: 'Wellness Team'
+            }
+        ];
+
+        let registrations = [];
+
+        // Initialize
+        function init() {
+            renderEvents();
+            updateRegistrationBadge();
+        }
+
+        // Render events
+        function renderEvents() {
+            const grid = document.getElementById('events-grid');
+            grid.innerHTML = lunchEvents.map(event => {
+                const isRegistered = registrations.some(r => r.eventId === event.id);
+                const spotsLeft = event.capacity - event.registered;
+                const almostFull = spotsLeft <= 5;
+
+                return `
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">📅 ${event.date}</div>
+                            <div class="event-title">${event.title}</div>
+                            <div class="event-time">⏰ ${event.time}</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-cuisine">${event.cuisine}</div>
+                            <div class="event-location">📍 ${event.location}</div>
+                            <div class="event-description">${event.description}</div>
+                            <div class="event-meta">
+                                <div class="event-meta-item">
+                                    <span>👥 ${spotsLeft} of ${event.capacity} spots</span>
+                                </div>
+                                ${almostFull ? '<div class="event-meta-item" style="color: var(--warning);">⚠️ Almost full</div>' : ''}
+                            </div>
+                            <button class="btn ${isRegistered ? 'btn-secondary' : 'btn-primary'}" 
+                                    onclick="showEventDetail(${event.id})"
+                                    ${spotsLeft === 0 && !isRegistered ? 'disabled' : ''}>
+                                ${isRegistered ? '✓ Registered' : (spotsLeft === 0 ? 'Event Full' : 'Sign Up')}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Show event detail
+        function showEventDetail(eventId) {
+            const event = lunchEvents.find(e => e.id === eventId);
+            const isRegistered = registrations.some(r => r.eventId === eventId);
+
+            const content = document.getElementById('event-detail-content');
+            content.innerHTML = `
+                <div style="margin-bottom: 24px;">
+                    <button class="btn btn-secondary" onclick="showPage('events')">← Back to Events</button>
+                </div>
+                <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 40px; border-radius: 8px; margin-bottom: 32px;">
+                    <h1 style="color: white; margin-bottom: 12px;">${event.title}</h1>
+                    <div style="font-size: 16px; opacity: 0.95;">📅 ${event.date} • ⏰ ${event.time}</div>
+                    <div style="font-size: 16px; opacity: 0.95; margin-top: 8px;">📍 ${event.location}</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px;">
+                    <div>
+                        <h3>Event Details</h3>
+                        <p style="color: var(--muted-foreground); line-height: 1.8; margin-bottom: 24px;">${event.description}</p>
+                        
+                        <div style="background-color: var(--muted); padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+                            <div style="margin-bottom: 16px;">
+                                <div style="color: var(--muted-foreground); font-size: 12px; text-transform: uppercase; font-weight: 500;">Cuisine</div>
+                                <div style="font-weight: 500; margin-top: 4px;">${event.cuisine}</div>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <div style="color: var(--muted-foreground); font-size: 12px; text-transform: uppercase; font-weight: 500;">Organizer</div>
+                                <div style="font-weight: 500; margin-top: 4px;">${event.organizer}</div>
+                            </div>
+                            <div>
+                                <div style="color: var(--muted-foreground); font-size: 12px; text-transform: uppercase; font-weight: 500;">Spots Available</div>
+                                <div style="font-weight: 500; margin-top: 4px;">${event.capacity - event.registered} of ${event.capacity}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        ${isRegistered ? `
+                            <div style="background-color: var(--accent-light); border: 1px solid #22c55e; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+                                <h3 style="color: #166534; margin-bottom: 12px;">✓ You are registered</h3>
+                                <p style="color: #166534; font-size: 14px;">Your registration is confirmed. We look forward to seeing you!</p>
+                            </div>
+                            <button class="btn btn-secondary" onclick="cancelRegistration(${event.id})" style="width: 100%; padding: 12px;">Cancel Registration</button>
+                        ` : (event.capacity - event.registered > 0 ? `
+                            <div class="signup-form">
+                                <h3 style="margin-bottom: 24px;">Sign Up for This Event</h3>
+                                <form id="signup-form-${event.id}" onsubmit="submitRegistration(event, ${event.id}); return false;">
+                                    <div class="form-group">
+                                        <label>Full Name *</label>
+                                        <input type="text" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address *</label>
+                                        <input type="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Department *</label>
+                                        <input type="text" placeholder="e.g., Engineering, Sales" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dietary Preferences</label>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="vegan-${event.id}">
+                                                <label for="vegan-${event.id}" style="margin: 0;">Vegan</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="vegetarian-${event.id}">
+                                                <label for="vegetarian-${event.id}" style="margin: 0;">Vegetarian</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="glutenfree-${event.id}">
+                                                <label for="glutenfree-${event.id}" style="margin: 0;">Gluten-Free</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="allergies-${event.id}">
+                                                <label for="allergies-${event.id}" style="margin: 0;">Allergies</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Additional Notes</label>
+                                        <textarea placeholder="Any special requests or allergies..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 16px;">Complete Registration</button>
+                                </form>
+                            </div>
+                        ` : `
+                            <div style="background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 24px; text-align: center;">
+                                <h3 style="color: #991b1b; margin-bottom: 12px;">Event Full</h3>
+                                <p style="color: #991b1b; font-size: 14px;">This event has reached capacity. Check back for future events!</p>
+                            </div>
+                        `)}
+                    </div>
+                </div>
+            `;
+
+            showPage('event-detail');
+            window.scrollTo(0, 0);
+        }
+
+        // Submit registration
+        function submitRegistration(event, eventId) {
+            const form = document.getElementById(`signup-form-${eventId}`);
+            if (!form.checkValidity()) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const name = form.querySelector('input[type="text"]').value;
+            const email = form.querySelector('input[type="email"]').value;
+            const department = form.querySelectorAll('input[type="text"]')[1].value;
+
+            const registration = {
+                eventId: eventId,
+                eventTitle: lunchEvents.find(e => e.id === eventId).title,
+                eventDate: lunchEvents.find(e => e.id === eventId).date,
+                name: name,
+                email: email,
+                department: department,
+                registeredAt: new Date().toLocaleDateString()
+            };
+
+            registrations.push(registration);
+            updateRegistrationBadge();
+            renderEvents();
+
+            alert(`Great! You're registered for "${lunchEvents.find(e => e.id === eventId).title}". A confirmation will be sent to ${email}.`);
+            showPage('events');
+        }
+
+        // Cancel registration
+        function cancelRegistration(eventId) {
+            if (confirm('Are you sure you want to cancel your registration?')) {
+                registrations = registrations.filter(r => r.eventId !== eventId);
+                updateRegistrationBadge();
+                renderEvents();
+                showPage('events');
+            }
+        }
+
+        // Render registrations
+        function renderRegistrations() {
+            const content = document.getElementById('registrations-content');
+
+            if (registrations.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🍽️</div>
+                        <h3>No Registrations Yet</h3>
+                        <p>You haven't signed up for any lunch events. Browse our events and join the fun!</p>
+                        <button class="btn btn-primary" onclick="showPage('events')" style="margin-top: 20px;">Browse Events</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const stats = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${registrations.length}</div>
+                        <div class="stat-label">Total Registrations</div>
+                    </div>
+                </div>
+            `;
+
+            const items = registrations.map(reg => `
+                <div class="registration-item">
+                    <div class="registration-header">
+                        <div>
+                            <div class="registration-title">${reg.eventTitle}</div>
+                        </div>
+                        <div class="registration-status">✓ Registered</div>
+                    </div>
+                    <div class="registration-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Date</div>
+                            <div class="detail-value">${reg.eventDate}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Your Name</div>
+                            <div class="detail-value">${reg.name}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Department</div>
+                            <div class="detail-value">${reg.department}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Registered</div>
+                            <div class="detail-value">${reg.registeredAt}</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary btn-small" onclick="cancelRegistration(${reg.eventId})">Cancel Registration</button>
+                </div>
+            `).join('');
+
+            content.innerHTML = stats + `<div class="registrations-list">${items}</div>`;
+        }
+
+        // Show page
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName + '-page').classList.add('active');
+
+            if (pageName === 'registrations') {
+                renderRegistrations();
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // Update registration badge
+        function updateRegistrationBadge() {
+            const badge = document.getElementById('registration-count');
+            if (registrations.length > 0) {
+                badge.textContent = registrations.length;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>
