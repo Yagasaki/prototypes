@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Vaelorix - Rogue Trader Recruitment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #b8960c;
+            --crimson: #8b0000;
+            --void: #0a0a12;
+            --void-light: #12121f;
+            --parchment: #f4e4bc;
+            --steel: #4a5568;
+            --bone: #e8dcc4;
+        }
+
+        @keyframes starfield {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--void);
+            color: var(--bone);
+            line-height: 1.7;
+        }
+
+        /* Starfield background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(1px 1px at 20px 30px, white, transparent),
+                radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(212, 175, 55, 0.8), transparent),
+                radial-gradient(1px 1px at 200px 150px, white, transparent);
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: starfield 200s linear infinite;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .app {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, rgba(10, 10, 18, 0.98) 0%, rgba(10, 10, 18, 0.9) 100%);
+            border-bottom: 2px solid var(--gold);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--bone);
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 120px 20px;
+            background: 
+                linear-gradient(180deg, transparent 0%, rgba(10, 10, 18, 0.8) 100%),
+                radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--bone);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Section styling */
+        section {
+            padding: 80px 0;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--bone);
+            font-style: italic;
+            margin-bottom: 48px;
+            opacity: 0.8;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 32px;
+            border-radius: 2px;
+            border: 2px solid var(--gold);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--void);
+        }
+
+        .btn-primary:hover {
+            animation: pulse-gold 1s ease-in-out infinite;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--gold);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* Position Cards */
+        .positions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .position-card {
+            background: linear-gradient(135deg, var(--void-light) 0%, var(--void) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+            padding: 32px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .position-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .position-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .position-title {
+            font-size: 22px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .position-rank {
+            font-size: 12px;
+            color: var(--crimson);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            padding: 4px 12px;
+            background: rgba(139, 0, 0, 0.2);
+            display: inline-block;
+            border: 1px solid var(--crimson);
+        }
+
+        .position-description {
+            color: var(--bone);
+            font-size: 14px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .position-requirements {
+            font-size: 13px;
+            color: var(--bone);
+            opacity: 0.7;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding-top: 16px;
+        }
+
+        /* Dynasty Info */
+        .dynasty-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .dynasty-text h3 {
+            font-size: 28px;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .dynasty-text p {
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .dynasty-crest {
+            text-align: center;
+            font-size: 180px;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin: 60px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 32px;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .stat-value {
+            font-size: 48px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--bone);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        /* Benefits */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .benefit-item {
+            padding: 24px;
+            border-left: 3px solid var(--gold);
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        .benefit-title {
+            color: var(--gold);
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .benefit-description {
+            color: var(--bone);
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Application Form */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--void-light) 0%, var(--void) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 48px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(10, 10, 18, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--bone);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: var(--void);
+            color: var(--bone);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: rgba(212, 175, 55, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 32px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-icon {
+            font-size: 32px;
+        }
+
+        .author-info {
+            font-size: 14px;
+        }
+
+        .author-name {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .author-role {
+            opacity: 0.7;
+        }
+
+        /* Warning Banner */
+        .warning-banner {
+            background: linear-gradient(90deg, var(--crimson) 0%, #5c0000 100%);
+            color: var(--bone);
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--void);
+            border-top: 2px solid var(--gold);
+            padding: 60px 20px 30px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--gold);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--bone);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--gold);
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .imperial-notice {
+            font-style: italic;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .dynasty-info {
+                grid-template-columns: 1fr;
+            }
+
+            .dynasty-crest {
+                font-size: 120px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 16px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield"></div>
+    
+    <div class="app">
+        <div class="warning-banner">
+            ⚠️ BY THE AUTHORITY OF THE HOLY ORDOS: THIS WARRANT OF TRADE IS SANCTIONED BY THE EMPEROR OF MANKIND ⚠️
+        </div>
+
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">⚜️</span>
+                    House Vaelorix
+                </div>
+                <nav class="nav-links">
+                    <a onclick="showPage('home')">Home</a>
+                    <a onclick="showPage('positions')">Positions</a>
+                    <a onclick="showPage('dynasty')">The Dynasty</a>
+                    <a onclick="showPage('apply')">Apply</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="hero">
+                <h1>Seek Fortune Among the Stars</h1>
+                <p class="hero-subtitle">
+                    "The void calls to those bold enough to answer. House Vaelorix extends its hand to the worthy — 
+                    join our dynasty and claim your place in the stars."
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="showPage('positions')">View Open Positions</button>
+                    <button class="btn btn-secondary" onclick="showPage('dynasty')">Learn About Us</button>
+                </div>
+            </div>
+
+            <div class="container">
+                <section>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Void Ships</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3,200</div>
+                            <div class="stat-label">Crew Members</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">847.M41</div>
+                            <div class="stat-label">Warrant Granted</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">∞</div>
+                            <div class="stat-label">Opportunities</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Why Serve House Vaelorix?</h2>
+                    <p class="section-subtitle">We offer more than employment — we offer purpose, profit, and protection</p>
+                    
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-title">⚔️ Licensed Armament</div>
+                            <div class="benefit-description">All crew are equipped with sanctioned weapons and void-hardened armor befitting their station.</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-title">💰 Profit Shares</div>
+                            <div class="benefit-description">Crew members receive a percentage of all expedition profits based on rank and tenure.</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-title">🛡️ Dynasty Protection</div>
+                            <div class="benefit-description">The full weight of House Vaelorix stands behind every member of our crew.</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-title">📜 Imperial Sanction</div>
+                            <div class="benefit-description">Our Warrant of Trade grants passage through any Imperial space without question.</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-title">🌌 See the Galaxy</div>
+                            <div class="benefit-description">Travel to distant worlds, lost colonies, and uncharted territories beyond the Imperium's borders.</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-title">📈 Advancement</div>
+                            <div class="benefit-description">Merit is rewarded. Those who prove their worth rise quickly within the dynasty's ranks.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Voices From the Void</h2>
+                    <p class="section-subtitle">Hear from those who serve aboard our vessels</p>
+                    
+                    <div class="testimonials-grid">
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">
+                                "I was a hab-worker on Scintilla with no future. Now I've walked on worlds the Administratum doesn't even have names for. House Vaelorix gave me purpose."
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-icon">👨‍🚀</div>
+                                <div class="author-info">
+                                    <div class="author-name">Kael Drennick</div>
+                                    <div class="author-role">Void-Master, 12 years service</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">
+                                "The profit shares alone would be enough, but it's the camaraderie that keeps me aboard. We're not just crew — we're dynasty."
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-icon">👩‍🔧</div>
+                                <div class="author-info">
+                                    <div class="author-name">Enginseer Theta-7</div>
+                                    <div class="author-role">Tech-Adept, Secundus Engineering</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">
+                                "Lord-Captain Vaelorix demands excellence, but rewards it generously. I've seen xenos ruins, archeotech vaults, and wonders beyond description."
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-icon">🗡️</div>
+                                <div class="author-info">
+                                    <div class="author-name">Sergeant Vorn Hessick</div>
+                                    <div class="author-role">Armsman Prime, Ship Security</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Positions Page -->
+        <div class="page" id="positions-page">
+            <div class="container" style="padding-top: 60px;">
+                <h2>Open Positions</h2>
+                <p class="section-subtitle">Current opportunities aboard the Vaelorix fleet</p>
+
+                <div class="positions-grid">
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">🧭</div>
+                        <div class="position-title">Navigator Secundus</div>
+                        <div class="position-rank">Senior Officer</div>
+                        <div class="position-description">
+                            Guide our vessels through the immaterium. Must possess the Navigator gene and have experience with warp translation.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Navigator lineage, 50+ successful translations, Navis Nobilite certification
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">📡</div>
+                        <div class="position-title">Astropath Transcendent</div>
+                        <div class="position-rank">Senior Officer</div>
+                        <div class="position-description">
+                            Serve as our voice across the stars. Transmit and receive astrotelepathic communications for the fleet.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Soul-binding, Scholastica Psykana certification, stable psychic index
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">⚙️</div>
+                        <div class="position-title">Enginseer</div>
+                        <div class="position-rank">Specialist</div>
+                        <div class="position-description">
+                            Maintain the sacred machinery of our vessels. Commune with machine spirits and perform the rites of repair.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Mechanicus ordination, plasma reactor certification, augmetic integration
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">🗡️</div>
+                        <div class="position-title">Armsman</div>
+                        <div class="position-rank">Crew</div>
+                        <div class="position-description">
+                            Defend the dynasty with blade and bolt. Serve in boarding actions, planetfall operations, and ship security.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Combat experience, physical fitness, loyalty oath
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">🔭</div>
+                        <div class="position-title">Explorator</div>
+                        <div class="position-rank">Specialist</div>
+                        <div class="position-description">
+                            Chart unknown territories, survey new worlds, and identify opportunities for profit and acquisition.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Cartographic training, xenos awareness certification, survival skills
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">💉</div>
+                        <div class="position-title">Chirurgeon</div>
+                        <div class="position-rank">Specialist</div>
+                        <div class="position-description">
+                            Tend to the wounded and preserve the crew. Knowledge of void-born ailments and combat medicine essential.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Medicae certification, surgical experience, oath of service
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">📊</div>
+                        <div class="position-title">Seneschal</div>
+                        <div class="position-rank">Senior Officer</div>
+                        <div class="position-description">
+                            Manage trade agreements, cargo manifests, and commercial operations. The dynasty's profit is your responsibility.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Commercial experience, linguistic proficiency, negotiation skills
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">⛪</div>
+                        <div class="position-title">Missionary</div>
+                        <div class="position-rank">Specialist</div>
+                        <div class="position-description">
+                            Spread the Emperor's light to unenlightened worlds. Provide spiritual guidance to crew and converts alike.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Ecclesiarchy ordination, conversion record, unwavering faith
+                        </div>
+                    </div>
+
+                    <div class="position-card" onclick="showPage('apply')">
+                        <div class="position-icon">🚀</div>
+                        <div class="position-title">Void-Born Ratings</div>
+                        <div class="position-rank">Crew</div>
+                        <div class="position-description">
+                            General crew positions across all vessels. Deck hands, gun crews, maintenance teams, and support staff.
+                        </div>
+                        <div class="position-requirements">
+                            Requires: Basic literacy, physical capability, willingness to serve
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynasty Page -->
+        <div class="page" id="dynasty-page">
+            <div class="container" style="padding-top: 60px;">
+                <section>
+                    <div class="dynasty-info">
+                        <div class="dynasty-text">
+                            <h3>The Vaelorix Legacy</h3>
+                            <p>
+                                House Vaelorix was granted its Warrant of Trade in 847.M41 by Sector Lord Hax himself, 
+                                in recognition of services rendered during the Margin Crusade. For nearly two centuries, 
+                                the dynasty has plied the void, establishing trade routes, founding colonies, and 
+                                amassing wealth beyond measure.
+                            </p>
+                            <p>
+                                Our current Lord-Captain, Adrielle Vaelorix, commands a fleet of seven vessels from the 
+                                bridge of the <em>Gilded Ambition</em>, a Mars-class battlecruiser of ancient and 
+                                venerable provenance. Under her leadership, the dynasty has expanded into the Koronus Expanse 
+                                and established profitable relations with numerous xenos species — within the bounds of Imperial law.
+                            </p>
+                            <p>
+                                We seek not merely profit, but legacy. Those who serve House Vaelorix become part of 
+                                something greater than themselves — a dynasty that will endure for millennia.
+                            </p>
+                        </div>
+                        <div class="dynasty-crest">⚜️</div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Fleet</h2>
+                    <p class="section-subtitle">Seven vessels sail under the Vaelorix banner</p>
+                    
+                    <div class="positions-grid">
+                        <div class="position-card">
+                            <div class="position-icon">🚀</div>
+                            <div class="position-title">Gilded Ambition</div>
+                            <div class="position-rank">Flagship - Mars-Class Battlecruiser</div>
+                            <div class="position-description">
+                                The pride of the fleet. Ancient and powerful, she has served the dynasty since its founding.
+                            </div>
+                        </div>
+                        <div class="position-card">
+                            <div class="position-icon">⚡</div>
+                            <div class="position-title">Swift Profit</div>
+                            <div class="position-rank">Sword-Class Frigate</div>
+                            <div class="position-description">
+                                Fast courier and escort. Perfect for rapid response and message running.
+                            </div>
+                        </div>
+                        <div class="position-card">
+                            <div class="position-icon">📦</div>
+                            <div class="position-title">Bounty Eternal</div>
+                            <div class="position-rank">Jericho-Class Transport</div>
+                            <div class="position-description">
+                                Our primary cargo hauler. Cavernous holds carry the wealth of worlds.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Apply Page -->
+        <div class="page" id="apply-page">
+            <div class="container" style="padding-top: 60px;">
+                <h2>Submit Your Application</h2>
+                <p class="section-subtitle">Take the first step toward fortune and glory</p>
+
+                <div class="form-container">
+                    <form id="application-form" onsubmit="submitApplication(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" required placeholder="As recorded in Imperial census">
+                            </div>
+                            <div class="form-group">
+                                <label>Homeworld *</label>
+                                <input type="text" required placeholder="Planet of origin">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Position Sought *</label>
+                            <select required>
+                                <option value="">Select a position</option>
+                                <option value="navigator">Navigator Secundus</option>
+                                <option value="astropath">Astropath Transcendent</option>
+                                <option value="enginseer">Enginseer</option>
+                                <option value="armsman">Armsman</option>
+                                <option value="explorator">Explorator</option>
+                                <option value="chirurgeon">Chirurgeon</option>
+                                <option value="seneschal">Seneschal</option>
+                                <option value="missionary">Missionary</option>
+                                <option value="ratings">Void-Born Ratings</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Previous Experience *</label>
+                            <textarea required placeholder="Detail your relevant experience, previous postings, and notable accomplishments..."></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Years of Service</label>
+                                <input type="text" placeholder="Total void experience">
+                            </div>
+                            <div class="form-group">
+                                <label>Imperial Certification #</label>
+                                <input type="text" placeholder="If applicable">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Why House Vaelorix? *</label>
+                            <textarea required placeholder="Tell us why you wish to serve the dynasty..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>References</label>
+                            <input type="text" placeholder="Names of those who can vouch for your character">
+                        </div>
+
+                        <div style="margin-top: 32px;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px;">
+                                Submit Application
+                            </button>
+                        </div>
+
+                        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7; text-align: center;">
+                            By submitting this application, you swear by the God-Emperor that all information provided is truthful. 
+                            Falsification is punishable by servitor conversion.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <a onclick="showPage('home')">Home</a>
+                    <a onclick="showPage('positions')">Open Positions</a>
+                    <a onclick="showPage('dynasty')">About the Dynasty</a>
+                    <a onclick="showPage('apply')">Apply Now</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="#">Astropathic Choir: VAELORIX-PRIME</a>
+                    <a href="#">Port Wander Office: Dock 7-Aurum</a>
+                    <a href="#">Footfall Representative: The Gilded Consulate</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Warrant of Trade (Public Record)</a>
+                    <a href="#">Crew Contract Terms</a>
+                    <a href="#">Imperial Compliance Statement</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Fleet Status</h4>
+                    <a href="#">Current Location: [CLASSIFIED]</a>
+                    <a href="#">Next Port: Footfall</a>
+                    <a href="#">Recruitment Status: ACTIVE</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 847.M41 - Present | House Vaelorix | By Warrant of the God-Emperor of Mankind</p>
+                <p class="imperial-notice">"In Profit and Faith, We Sail the Void"</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName + '-page').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function submitApplication(event) {
+            event.preventDefault();
+            const form = document.getElementById('application-form');
+            if (!form.checkValidity()) {
+                alert('Please complete all required fields.');
+                return;
+            }
+
+            const name = form.querySelector('input[type="text"]').value;
+            alert(`Your application has been received, ${name}.\n\nMay the Emperor guide your journey to the stars.\n\nA representative of House Vaelorix will contact you via astropathic communion or at your next port of call.`);
+            form.reset();
+        }
+    </script>
+</body>
+</html>
