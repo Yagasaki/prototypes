@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ironforge Merchants - Votannian Ale Logistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --copper: #b87333;
+            --copper-dark: #8b5a2b;
+            --iron: #36454f;
+            --iron-light: #4a5f7f;
+            --gold: #d4af37;
+            --stone: #8b8b83;
+            --cream: #f5f1de;
+            --ale-brown: #3e2723;
+            --ale-gold: #d2691e;
+        }
+
+        @keyframes pour {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Garamond', 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1410 0%, #2d2420 100%);
+            color: var(--cream);
+            line-height: 1.6;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, var(--ale-brown) 0%, var(--iron) 100%);
+            border-bottom: 3px solid var(--copper);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--gold);
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+            animation: pour 2s ease-in-out infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--ale-brown) 0%, var(--iron-light) 100%);
+            padding: 100px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--copper);
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            letter-spacing: 3px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--cream);
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        h2 {
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--cream);
+            margin-bottom: 48px;
+            opacity: 0.8;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 32px;
+            border-radius: 4px;
+            border: 2px solid var(--copper);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+            color: var(--cream);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(184, 115, 51, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--copper);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(184, 115, 51, 0.1);
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, var(--iron) 0%, #2a2420 100%);
+            border: 2px solid var(--copper);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(184, 115, 51, 0.3);
+            border-color: var(--gold);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, var(--ale-gold) 0%, var(--ale-brown) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 100px;
+            font-weight: bold;
+        }
+
+        .product-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 22px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .product-designation {
+            font-size: 12px;
+            color: var(--copper);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .product-description {
+            color: var(--cream);
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex: 1;
+            opacity: 0.9;
+        }
+
+        .product-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 16px;
+        }
+
+        .spec-item {
+            font-size: 13px;
+        }
+
+        .spec-label {
+            color: var(--stone);
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .spec-value {
+            color: var(--copper);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            color: var(--ale-gold);
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        /* Shipping Info */
+        .shipping-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .shipping-card {
+            background: linear-gradient(135deg, var(--iron) 0%, #2a2420 100%);
+            border-left: 4px solid var(--copper);
+            padding: 28px;
+            border-radius: 4px;
+        }
+
+        .shipping-card h3 {
+            margin-bottom: 12px;
+        }
+
+        .shipping-card p {
+            color: var(--cream);
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Detail Page */
+        .detail-hero {
+            background: linear-gradient(135deg, var(--ale-gold) 0%, var(--ale-brown) 100%);
+            color: var(--cream);
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+
+        .detail-hero h1 {
+            color: var(--cream);
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .detail-hero p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .specs-section {
+            background: linear-gradient(135deg, var(--iron) 0%, #2a2420 100%);
+            border: 2px solid var(--copper);
+            border-radius: 8px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+        }
+
+        .spec-card {
+            text-align: center;
+        }
+
+        .spec-card-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--ale-gold);
+            margin-bottom: 8px;
+        }
+
+        .spec-card-label {
+            color: var(--cream);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-item {
+            padding: 24px;
+            border: 2px solid var(--copper);
+            border-radius: 4px;
+            background: linear-gradient(135deg, var(--iron) 0%, #2a2420 100%);
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            border-color: var(--gold);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .feature-title {
+            color: var(--gold);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            color: var(--cream);
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Order Form */
+        .order-form {
+            background: linear-gradient(135deg, var(--iron) 0%, #2a2420 100%);
+            border: 2px solid var(--copper);
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--copper);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--copper);
+            color: var(--cream);
+            font-size: 14px;
+            font-family: inherit;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        input[type="tel"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 60px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 32px;
+            background: linear-gradient(135deg, var(--iron) 0%, #2a2420 100%);
+            border: 2px solid var(--copper);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 42px;
+            color: var(--ale-gold);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--cream);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--ale-brown);
+            border-top: 3px solid var(--copper);
+            padding: 60px 20px 30px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--gold);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: var(--copper);
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--copper);
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 16px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🍺</span>
+                    Ironforge Merchants
+                </div>
+                <nav class="nav-links">
+                    <a onclick="showPage('home')">Home</a>
+                    <a onclick="showPage('products')">Products</a>
+                    <a onclick="showPage('shipping')">Shipping</a>
+                    <a onclick="showPage('order')">Order</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="hero">
+                <h1>Ironforge Merchants</h1>
+                <p class="hero-subtitle">
+                    "The Finest Votannian Ale Delivered Across the Galaxy"
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="showPage('products')">Browse Products</button>
+                    <button class="btn btn-secondary" onclick="showPage('shipping')">Shipping Info</button>
+                </div>
+            </div>
+
+            <div class="container">
+                <section>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">847</div>
+                            <div class="stat-label">Years in Trade</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">1,200+</div>
+                            <div class="stat-label">Worlds Served</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">50M</div>
+                            <div class="stat-label">Casks Shipped</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">100%</div>
+                            <div class="stat-label">Customer Satisfaction</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>About Ironforge Merchants</h2>
+                    <p class="section-subtitle">Licensed distributors of the finest brews from the Leagues of Votann</p>
+                    
+                    <p style="text-align: center; max-width: 800px; margin: 0 auto 32px; font-size: 16px; opacity: 0.9;">
+                        For nearly a millennium, Ironforge Merchants has held the exclusive mandate to distribute Votannian Ale 
+                        throughout Imperial space and beyond. We work directly with the master brewers of the Leagues of Votann, 
+                        ensuring every cask meets the highest standards of quality and flavor. From the smallest fringe worlds to 
+                        the greatest hive cities, Ironforge delivers excellence.
+                    </p>
+
+                    <h3 style="text-align: center; margin-top: 48px; margin-bottom: 32px;">Why Choose Ironforge?</h3>
+
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">🏆</div>
+                            <div class="feature-title">Premium Quality</div>
+                            <div class="feature-description">Every batch personally approved by Votannian masters. No shortcuts, no compromises.</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🚚</div>
+                            <div class="feature-title">Reliable Delivery</div>
+                            <div class="feature-description">Climate-controlled void transport ensures perfect condition upon arrival.</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">💰</div>
+                            <div class="feature-title">Fair Pricing</div>
+                            <div class="feature-description">Direct from source means better prices for our valued customers.</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⚡</div>
+                            <div class="feature-title">Fast Service</div>
+                            <div class="feature-description">Orders placed with 24 hours. Delivery within 6 weeks to most worlds.</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🛡️</div>
+                            <div class="feature-title">Guaranteed Safe</div>
+                            <div class="feature-description">Full voidship insurance on all shipments. No loss, no cost to you.</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📜</div>
+                            <div class="feature-title">Imperial Certified</div>
+                            <div class="feature-description">All shipments meet Imperial Adeptus Arbites standards for intoxicants.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Featured Products</h2>
+                    <p class="section-subtitle">Our most popular brews</p>
+                    <div class="products-grid" id="home-products"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Products Page -->
+        <div class="page" id="products-page">
+            <div class="container" style="padding-top: 60px;">
+                <h2>Our Product Line</h2>
+                <p class="section-subtitle">Crafted by the finest brewmasters of the Leagues of Votann</p>
+                <div class="products-grid" id="products-grid"></div>
+            </div>
+        </div>
+
+        <!-- Product Detail Page -->
+        <div class="page" id="product-detail-page">
+            <div class="container" id="detail-content" style="padding-top: 40px;"></div>
+        </div>
+
+        <!-- Shipping Page -->
+        <div class="page" id="shipping-page">
+            <div class="container" style="padding-top: 60px;">
+                <h2>Shipping & Logistics</h2>
+                <p class="section-subtitle">How we get Votannian Ale to you safely and quickly</p>
+
+                <div class="shipping-grid">
+                    <div class="shipping-card">
+                        <h3>🚀 Standard Delivery</h3>
+                        <p>6-8 weeks to most Imperial worlds. Includes climate-controlled void transport and basic insurance.</p>
+                        <p style="margin-top: 12px; color: var(--ale-gold); font-weight: bold;">Standard Rate: +15% to base price</p>
+                    </div>
+                    <div class="shipping-card">
+                        <h3>⚡ Express Delivery</h3>
+                        <p>3-4 weeks using express courier routes. Premium insulation and temperature monitoring systems.</p>
+                        <p style="margin-top: 12px; color: var(--ale-gold); font-weight: bold;">Express Rate: +35% to base price</p>
+                    </div>
+                    <div class="shipping-card">
+                        <h3>🏃 Rapid Deployment</h3>
+                        <p>1-2 weeks via high-priority military transport. Only available to Rogue Trader accounts and above.</p>
+                        <p style="margin-top: 12px; color: var(--ale-gold); font-weight: bold;">Contact for Quote</p>
+                    </div>
+                    <div class="shipping-card">
+                        <h3>📦 Local Pickup</h3>
+                        <p>Available at Footfall and Port Wander. Immediate possession upon payment. No shipping delays.</p>
+                        <p style="margin-top: 12px; color: var(--ale-gold); font-weight: bold;">No Additional Charge</p>
+                    </div>
+                    <div class="shipping-card">
+                        <h3>🛡️ Full Insurance</h3>
+                        <p>Every shipment is fully insured against void damage, piracy, and Imperial confiscation.</p>
+                        <p style="margin-top: 12px; color: var(--ale-gold); font-weight: bold;">Included in Standard Service</p>
+                    </div>
+                    <div class="shipping-card">
+                        <h3>📍 Tracking</h3>
+                        <p>Real-time astropathic tracking available for all shipments. Know exactly where your ale is.</p>
+                        <p style="margin-top: 12px; color: var(--ale-gold); font-weight: bold;">Premium Feature: +5%</p>
+                    </div>
+                </div>
+
+                <section style="text-align: center;">
+                    <h3 style="margin-top: 60px; margin-bottom: 24px;">Questions About Shipping?</h3>
+                    <button class="btn btn-primary" onclick="showPage('order')">Contact Us</button>
+                </section>
+            </div>
+        </div>
+
+        <!-- Order Page -->
+        <div class="page" id="order-page">
+            <div class="container" style="padding-top: 60px;">
+                <h2>Place Your Order</h2>
+                <p class="section-subtitle">Get Votannian Ale delivered to your doorstep across the galaxy</p>
+
+                <div class="order-form">
+                    <form id="order-form" onsubmit="submitOrder(event)">
+                        <h3 style="margin-bottom: 24px;">Customer Information</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" required placeholder="Captain's name or organization">
+                            </div>
+                            <div class="form-group">
+                                <label>Rank/Title</label>
+                                <input type="text" placeholder="e.g., Rogue Trader, Admiral, Merchant Prince">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address *</label>
+                                <input type="email" required placeholder="Your contact email">
+                            </div>
+                            <div class="form-group">
+                                <label>Astropathic Designation</label>
+                                <input type="text" placeholder="For astropathic confirmation">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Delivery World *</label>
+                                <input type="text" required placeholder="Target planet or station">
+                            </div>
+                            <div class="form-group">
+                                <label>Sector</label>
+                                <input type="text" placeholder="e.g., Calixis, Koronus">
+                            </div>
+                        </div>
+
+                        <h3 style="margin: 32px 0 24px;">Order Details</h3>
+
+                        <div class="form-group">
+                            <label>Select Products *</label>
+                            <select required multiple>
+                                <option value="1">Veteran's Reserve - 5 Casks @ 250 TG each</option>
+                                <option value="2">Golden Age - 10 Casks @ 180 TG each</option>
+                                <option value="3">The Deep - 3 Casks @ 350 TG each</option>
+                                <option value="4">Celebratory Brew - 20 Casks @ 120 TG each</option>
+                                <option value="5">Trial Sample - 1 Cask @ 500 TG</option>
+                            </select>
+                            <p style="font-size: 12px; margin-top: 8px; opacity: 0.7;">Hold Ctrl/Cmd to select multiple products</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Shipping Method *</label>
+                            <select required>
+                                <option value="">Select shipping option</option>
+                                <option value="standard">Standard (6-8 weeks) +15%</option>
+                                <option value="express">Express (3-4 weeks) +35%</option>
+                                <option value="pickup">Local Pickup</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Special Requests</label>
+                            <textarea placeholder="Any special instructions? Custom packaging? Ceremonial needs?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Preferred Contact Method</label>
+                            <select>
+                                <option value="">Select method</option>
+                                <option value="astropath">Astropathic Transmission</option>
+                                <option value="email">Email</option>
+                                <option value="voice">Vox-Relay</option>
+                                <option value="courier">Imperial Courier</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-top: 32px;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px;">
+                                Submit Order
+                            </button>
+                        </div>
+
+                        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7; text-align: center;">
+                            By placing an order, you agree to our Terms of Service and payment terms: 50% deposit upon order, 
+                            balance due upon delivery.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a onclick="showPage('home')">Home</a>
+                    <a onclick="showPage('products')">Products</a>
+                    <a onclick="showPage('shipping')">Shipping</a>
+                    <a onclick="showPage('order')">Order</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="#">Footfall Office: Dock 12-Beta</a>
+                    <a href="#">Port Wander: Trading Quarter</a>
+                    <a href="#">Astropathic: IRONFORGE-PRIME</a>
+                </div>
+                <div class="footer-section">
+                    <h4>About</h4>
+                    <a href="#">Our History</a>
+                    <a href="#">Quality Standards</a>
+                    <a href="#">Partnerships</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Imperial Compliance</a>
+                    <a href="#">Return Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Ironforge Merchants • Approved Votannian Ale Distributor • M.41</p>
+                <p style="margin-top: 8px;">"Quality Crafted, Safely Delivered" — Our Promise to You</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Product database
+        const products = [
+            {
+                id: 1,
+                name: "Veteran's Reserve",
+                designation: "Premium Selection",
+                description: "A bold, smoky brew aged for 50 years in Votannian stone vaults. Complex notes of oak, honey, and coal smoke. For those who have truly lived.",
+                price: "250 TG per cask",
+                specs: {
+                    abv: "12.5%",
+                    age: "50 Years",
+                    caskSize: "40 Liters",
+                    aroma: "Smoke, Honey, Oak"
+                },
+                icon: "🥃",
+                features: [
+                    { icon: "⏳", title: "50 Year Maturation", desc: "Aged in sacred Votannian stone vaults" },
+                    { icon: "🪨", title: "Pure Mineral Water", desc: "From the deepest Votannian mines" },
+                    { icon: "🌾", title: "Heritage Grains", desc: "Ancient barley varieties cultivated for millennia" },
+                    { icon: "👑", title: "Master Brewed", desc: "Only the eldest craftsmasters create this blend" },
+                    { icon: "⭐", title: "Award Winning", desc: "Winner of 47 consecutive galactic brewing competitions" },
+                    { icon: "💎", title: "Collector's Item", desc: "Value appreciates 3% annually" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Golden Age",
+                designation: "Standard Selection",
+                description: "The most popular Votannian ale across the Imperium. Balanced, smooth, with hints of caramel and spice. Perfect for daily consumption and large gatherings.",
+                price: "180 TG per cask",
+                specs: {
+                    abv: "10%",
+                    age: "15 Years",
+                    caskSize: "40 Liters",
+                    aroma: "Caramel, Spice, Grain"
+                },
+                icon: "🍺",
+                features: [
+                    { icon: "⭐", title: "Most Popular", desc: "Standard brew across 1,200+ worlds" },
+                    { icon: "🎯", title: "Balanced Flavor", desc: "Perfect harmony of sweetness and depth" },
+                    { icon: "🚀", title: "Shipping Veteran", desc: "Proven stable during void transport" },
+                    { icon: "👥", title: "Community Choice", desc: "Beloved by billions of loyal consumers" },
+                    { icon: "📈", title: "Great Value", desc: "The best price-to-quality ratio available" },
+                    { icon: "🎉", title: "Celebration Ready", desc: "Perfect for ceremonies and celebrations" }
+                ]
+            },
+            {
+                id: 3,
+                name: "The Deep",
+                designation: "Rare Limited Edition",
+                description: "Brewed only once per decade from grains harvested in the deepest Votannian caverns. Intensely complex with notes of minerals, earth, and dark fruit.",
+                price: "350 TG per cask",
+                specs: {
+                    abv: "14%",
+                    age: "75 Years",
+                    caskSize: "20 Liters",
+                    aroma: "Minerals, Earth, Dark Fruit"
+                },
+                icon: "⛏️",
+                features: [
+                    { icon: "🔱", title: "Deepest Caverns", desc: "Brewed in vaults 3km beneath the surface" },
+                    { icon: "📅", title: "Decennial Release", desc: "Only brewed once per 10 years" },
+                    { icon: "💎", title: "Extreme Rarity", desc: "Fewer than 100 casks produced per batch" },
+                    { icon: "🧪", title: "Ancient Recipe", desc: "Unmodified formula from M.24" },
+                    { icon: "🏆", title: "Legendary Status", desc: "Sought by collectors across the galaxy" },
+                    { icon: "👑", title: "Emperor's Choice", desc: "Rumored favorite of high-ranking nobles" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Celebratory Brew",
+                designation: "Festive Selection",
+                description: "A lighter, sweeter ale perfect for festivals, ceremonies, and celebrations. Approachable for newcomers, yet beloved by connoisseurs for its brightness.",
+                price: "120 TG per cask",
+                specs: {
+                    abv: "8%",
+                    age: "8 Years",
+                    caskSize: "40 Liters",
+                    aroma: "Honey, Fruit, Vanilla"
+                },
+                icon: "🎊",
+                features: [
+                    { icon: "🎉", title: "Festival Favorite", desc: "Standard brew at Imperial celebrations" },
+                    { icon: "🍯", title: "Sweet & Approachable", desc: "Perfect introduction to Votannian ales" },
+                    { icon: "👨‍👩‍👧‍👦", title: "Family Friendly", desc: "Enjoyed across all ages and stations" },
+                    { icon: "💰", title: "Most Affordable", desc: "Premium quality at accessible price" },
+                    { icon: "🌟", title: "Bright & Festive", desc: "Golden color, light on the palate" },
+                    { icon: "🎁", title: "Gift Worthy", desc: "Perfect present for any occasion" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Trial Sample",
+                designation: "Newcomer's Kit",
+                description: "A single cask sampling of a rotating Votannian selection. Perfect for those new to the brand wanting to experience true quality without major commitment.",
+                price: "500 TG per cask",
+                specs: {
+                    abv: "Varies",
+                    age: "Varies",
+                    caskSize: "2 Liters",
+                    aroma: "Varies"
+                },
+                icon: "🥄",
+                features: [
+                    { icon: "🔄", title: "Rotating Selection", desc: "Different Votannian variety each month" },
+                    { icon: "🧪", title: "Discovery Kit", desc: "Perfect for sampling without commitment" },
+                    { icon: "📖", title: "Educational", desc: "Includes tasting notes and history" },
+                    { icon: "✨", title: "Premium Quality", desc: "Same quality as full casks, smaller size" },
+                    { icon: "🎓", title: "Learn the Craft", desc: "Expert guidance on appreciation and storage" },
+                    { icon: "🤝", title: "Collector's Option", desc: "Start a journey to full connoisseurship" }
+                ]
+            }
+        ];
+
+        // Initialize
+        function init() {
+            renderHomeProducts();
+            renderProducts();
+        }
+
+        // Render home products
+        function renderHomeProducts() {
+            const grid = document.getElementById('home-products');
+            if (!grid) return;
+            grid.innerHTML = products.slice(0, 3).map(p => createProductCard(p)).join('');
+        }
+
+        // Render all products
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            if (!grid) return;
+            grid.innerHTML = products.map(p => createProductCard(p)).join('');
+        }
+
+        // Create product card
+        function createProductCard(product) {
+            return `
+                <div class="product-card" onclick="showDetail(${product.id})">
+                    <div class="product-image">${product.icon}</div>
+                    <div class="product-content">
+                        <div class="product-designation">${product.designation}</div>
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-specs">
+                            <div class="spec-item">
+                                <div class="spec-label">ABV</div>
+                                <div class="spec-value">${product.specs.abv}</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Age</div>
+                                <div class="spec-value">${product.specs.age}</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Cask Size</div>
+                                <div class="spec-value">${product.specs.caskSize}</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Price</div>
+                                <div class="spec-value">${product.price}</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;">View Details</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show product detail
+        function showDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const content = document.getElementById('detail-content');
+            content.innerHTML = `
+                <div style="margin-bottom: 24px;">
+                    <button class="btn btn-secondary" onclick="showPage('products')">← Back to Products</button>
+                </div>
+
+                <div class="detail-hero">
+                    <h1>${product.name}</h1>
+                    <p style="font-size: 18px; margin-top: 8px;">${product.designation}</p>
+                    <p style="font-size: 16px; margin-top: 16px; opacity: 0.95;">${product.description}</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin: 60px 0;">
+                    <div style="text-align: center; font-size: 120px;">${product.icon}</div>
+                    <div>
+                        <h2>${product.name}</h2>
+                        <div class="product-price">${product.price}</div>
+                        <button class="btn btn-primary btn-large" onclick="showPage('order')" style="width: 100%; margin-top: 24px;">
+                            Order Now
+                        </button>
+                    </div>
+                </div>
+
+                <div class="specs-section">
+                    <h2 style="margin-bottom: 40px;">Specifications</h2>
+                    <div class="specs-grid">
+                        <div class="spec-card">
+                            <div class="spec-card-value">${product.specs.abv}</div>
+                            <div class="spec-card-label">Alcohol Content</div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-card-value">${product.specs.age}</div>
+                            <div class="spec-card-label">Age</div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-card-value">${product.specs.caskSize}</div>
+                            <div class="spec-card-label">Cask Size</div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-card-value">${product.specs.aroma}</div>
+                            <div class="spec-card-label">Aroma Profile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin: 60px 0;">
+                    <h2 style="margin-bottom: 40px;">Why Choose ${product.name}?</h2>
+                    <div class="features-grid">
+                        ${product.features.map(f => `
+                            <div class="feature-item">
+                                <div class="feature-icon">${f.icon}</div>
+                                <div class="feature-title">${f.title}</div>
+                                <div class="feature-description">${f.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <section style="text-align: center; margin: 60px 0;">
+                    <h2>Ready to Experience Excellence?</h2>
+                    <button class="btn btn-primary btn-large" onclick="showPage('order')" style="margin-top: 32px;">
+                        Order ${product.name}
+                    </button>
+                </section>
+            `;
+
+            showPage('product-detail');
+            window.scrollTo(0, 0);
+        }
+
+        // Show page
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName + '-page').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Submit order
+        function submitOrder(event) {
+            event.preventDefault();
+            const form = document.getElementById('order-form');
+            if (!form.checkValidity()) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const name = form.querySelector('input[type="text"]').value;
+            const world = form.querySelectorAll('input[type="text"]')[2].value;
+            
+            alert(`Order received, Captain ${name}!\n\nYour Votannian Ale has been queued for shipment to ${world}.\n\nAn Ironforge Merchants representative will contact you via the astropath within 24 hours to confirm delivery details and payment terms.\n\nMay this ale bring joy to your crew!`);
+            form.reset();
+            showPage('home');
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>
