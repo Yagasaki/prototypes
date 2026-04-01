@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperial Links - Primarch Golf Equipment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #b8860b;
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --white: #f5f5f5;
+            --accent: #c9a961;
+            --crimson: #8b0000;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Garamond', 'Georgia', serif;
+            background: linear-gradient(135deg, var(--black) 0%, #1a1410 100%);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, var(--black) 0%, var(--dark-gray) 100%);
+            border-bottom: 3px solid var(--gold);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--crimson);
+            color: var(--gold);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            padding: 60px 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: var(--gold);
+            margin-bottom: 24px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 18px;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--crimson) 0%, var(--gold-dark) 100%);
+            padding: 100px 20px;
+            text-align: center;
+            margin-bottom: 60px;
+            border-radius: 8px;
+            border: 3px solid var(--gold);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: var(--white);
+            margin-bottom: 32px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 32px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--gold);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #2a2420 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(212, 175, 55, 0.3);
+            border-color: var(--accent);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(135deg, #3a3530 0%, #2a2420 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .product-content {
+            padding: 28px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 20px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .product-type {
+            font-size: 12px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .product-description {
+            color: #ccc;
+            font-size: 13px;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .product-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 16px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+
+        .spec-item {
+            text-align: center;
+        }
+
+        .spec-label {
+            color: #888;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .spec-value {
+            color: var(--gold);
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 28px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* Cart */
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+        }
+
+        .cart-items {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #2a2420 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            font-size: 48px;
+            text-align: center;
+        }
+
+        .cart-item-info h3 {
+            margin-bottom: 4px;
+        }
+
+        .cart-item-meta {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .cart-item-price {
+            text-align: right;
+        }
+
+        .cart-item-total {
+            font-size: 20px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .cart-summary {
+            background: linear-gradient(135deg, var(--crimson) 0%, var(--gold-dark) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 28px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .summary-total {
+            border-top: 2px solid var(--gold);
+            padding-top: 16px;
+            margin-top: 16px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart p {
+            font-size: 18px;
+            margin-bottom: 24px;
+        }
+
+        /* Checkout Form */
+        .checkout-form {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #2a2420 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 700px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section h3 {
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--white);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .success-message h2 {
+            margin-bottom: 16px;
+        }
+
+        .success-message p {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 24px;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(180deg, var(--black) 0%, var(--dark-gray) 100%);
+            border-top: 3px solid var(--gold);
+            padding: 60px 20px 30px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--gold);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">⛳</span>
+                    Imperial Links
+                </div>
+                <nav class="nav-links">
+                    <a onclick="showPage('home')">Home</a>
+                    <a onclick="showPage('shop')">Shop</a>
+                    <a onclick="showPage('cart')">
+                        Cart
+                        <span class="cart-icon">🛒
+                            <span class="cart-badge" id="cart-count" style="display: none;">0</span>
+                        </span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="hero">
+                <h1>Imperial Links</h1>
+                <p>Where Primarchs Perfect Their Swing</p>
+                <p style="font-size: 16px; margin-bottom: 32px;">
+                    "Golf is the pursuit of precision mastery. These clubs shall not disappoint." — The Emperor
+                </p>
+                <button class="btn btn-primary" onclick="showPage('shop')">Explore Our Arsenal</button>
+            </div>
+
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 48px;">Why Imperial Links?</h2>
+                <div class="products-grid">
+                    <div style="background: linear-gradient(135deg, var(--dark-gray) 0%, #2a2420 100%); border: 2px solid var(--gold); border-radius: 8px; padding: 32px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">🏆</div>
+                        <h3>Championship Precision</h3>
+                        <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Every club engineered for perfection. No compromise.</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, var(--dark-gray) 0%, #2a2420 100%); border: 2px solid var(--gold); border-radius: 8px; padding: 32px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">⚡</div>
+                        <h3>Advanced Materials</h3>
+                        <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Crafted with exotic alloys and composites from across the Imperium.</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, var(--dark-gray) 0%, #2a2420 100%); border: 2px solid var(--gold); border-radius: 8px; padding: 32px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">👑</div>
+                        <h3>Prestige Craftsmanship</h3>
+                        <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Each set handcrafted by master artisans of the Mechanicus.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shop Page -->
+        <div class="page" id="shop-page">
+            <div class="container">
+                <h1>The Divine Arsenal</h1>
+                <p class="subtitle">Select your weapons of precision</p>
+
+                <div class="products-grid">
+                    <div class="product-card" onclick="addToCart(1, 'Sanguinius Driver', 2450)">
+                        <div class="product-image">⛳</div>
+                        <div class="product-content">
+                            <div class="product-type">Driver</div>
+                            <h3 class="product-name">Sanguinius Driver</h3>
+                            <p class="product-description">The angel's choice. Forged in fires of perfection, this driver achieves impossible distances.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Loft</div>
+                                    <div class="spec-value">10.5°</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Distance</div>
+                                    <div class="spec-value">280+ yards</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$2,450</div>
+                                <button class="btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(2, 'Guilliman Irons Set', 3200)">
+                        <div class="product-image">🎯</div>
+                        <div class="product-content">
+                            <div class="product-type">Irons (3-9)</div>
+                            <h3 class="product-name">Guilliman Irons Set</h3>
+                            <p class="product-description">Perfect control and consistency. The tactical choice for strategic play across all distances.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Clubs</div>
+                                    <div class="spec-value">7-club set</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Material</div>
+                                    <div class="spec-value">Titanium</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$3,200</div>
+                                <button class="btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(3, 'Lion Putter', 1850)">
+                        <div class="product-image">🏌️</div>
+                        <div class="product-content">
+                            <div class="product-type">Putter</div>
+                            <h3 class="product-name">Lion Putter</h3>
+                            <p class="product-description">Supreme confidence on the green. The putter that never misses its target. Awakened in darkness, perfect in light.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Length</div>
+                                    <div class="spec-value">35 inches</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Balance</div>
+                                    <div class="spec-value">Face-Balanced</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$1,850</div>
+                                <button class="btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(4, 'Russ Hybrid Set', 2100)">
+                        <div class="product-image">🐺</div>
+                        <div class="product-content">
+                            <div class="product-type">Hybrid Club</div>
+                            <h3 class="product-name">Russ Hybrid Set</h3>
+                            <p class="product-description">Savage power meets refined control. The wolf's way—relentless and unstoppable on every shot.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Lofts</div>
+                                    <div class="spec-value">3-5 Hybrid</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Forgiveness</div>
+                                    <div class="spec-value">Maximum</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$2,100</div>
+                                <button class="btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(5, 'Imperial Wedge Set', 1600)">
+                        <div class="product-image">💎</div>
+                        <div class="product-content">
+                            <div class="product-type">Wedges</div>
+                            <h3 class="product-name">Imperial Wedge Set</h3>
+                            <p class="product-description">Short game mastery. Pitching, sand, and lob wedges for absolute precision around the green.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Set</div>
+                                    <div class="spec-value">P, S, L</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Bounce</div>
+                                    <div class="spec-value">Optimized</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$1,600</div>
+                                <button class="btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(6, 'Cadia Bag & Cart', 950)">
+                        <div class="product-image">🎒</div>
+                        <div class="product-content">
+                            <div class="product-type">Accessory</div>
+                            <h3 class="product-name">Cadia Bag & Cart</h3>
+                            <p class="product-description">Lightweight yet durable. Tactical organization for all your imperial golf needs. Never surrendered, never broken.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Capacity</div>
+                                    <div class="spec-value">14 clubs</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Material</div>
+                                    <div class="spec-value">Synthetic</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$950</div>
+                                <button class="btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Page -->
+        <div class="page" id="cart-page">
+            <div class="container">
+                <h1>Your Arsenal</h1>
+                <p class="subtitle">Review your selected implements of victory</p>
+
+                <div id="cart-content"></div>
+            </div>
+        </div>
+
+        <!-- Checkout Page -->
+        <div class="page" id="checkout-page">
+            <div class="container">
+                <h1>Finalize Your Purchase</h1>
+                <p class="subtitle">One step away from perfection</p>
+
+                <div class="checkout-form">
+                    <form id="checkout-form" onsubmit="submitCheckout(event)">
+                        <div class="form-section">
+                            <h3>Shipping Information</h3>
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" required placeholder="Primarch Name">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Email *</label>
+                                    <input type="email" required placeholder="your@email.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone *</label>
+                                    <input type="tel" required placeholder="+1 234 567 8900">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Address *</label>
+                                <input type="text" required placeholder="Your fortress monastery">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>City *</label>
+                                    <input type="text" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Postal Code *</label>
+                                    <input type="text" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Payment Information</h3>
+                            <div class="form-group">
+                                <label>Card Number *</label>
+                                <input type="text" required placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry *</label>
+                                    <input type="text" required placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV *</label>
+                                    <input type="text" required placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px; margin-top: 32px;">
+                            Complete Purchase
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div class="page" id="success-page">
+            <div class="container">
+                <div class="success-message">
+                    <div class="success-icon">⛳✨</div>
+                    <h2>Victory Secured!</h2>
+                    <p>Your order has been received and your clubs are being prepared for immediate dispatch.</p>
+                    <p style="font-size: 14px; color: #999; margin-bottom: 32px;">
+                        Order Confirmation: IMP-LINKS-2026-001<br>
+                        Estimated Delivery: 3-5 Imperial Standard Days
+                    </p>
+                    <button class="btn btn-primary" onclick="showPage('shop')">Return to Shop</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <a onclick="showPage('shop')">All Products</a>
+                    <a href="#">New Arrivals</a>
+                    <a href="#">Bestsellers</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Shipping & Returns</a>
+                    <a href="#">Warranty</a>
+                </div>
+                <div class="footer-section">
+                    <h4>About</h4>
+                    <a href="#">Our History</a>
+                    <a href="#">Craftsmanship</a>
+                    <a href="#">The Emperor's Game</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Imperial Copyright</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Imperial Links - Primarch Golf Equipment • "In Faith and Precision"</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            updateCartBadge();
+            alert(`${name} added to arsenal!`);
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+            updateCartBadge();
+        }
+
+        function updateQuantity(id, quantity) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity = Math.max(1, quantity);
+                renderCart();
+            }
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-count');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderCart() {
+            const content = document.getElementById('cart-content');
+
+            if (cart.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Your arsenal is empty.</p>
+                        <button class="btn btn-primary" onclick="showPage('shop')">Begin Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 100;
+            const tax = subtotal * 0.08;
+            const total = subtotal + shipping + tax;
+
+            let cartHTML = `
+                <div class="cart-container">
+                    <div class="cart-items">
+                        <h3 style="margin-bottom: 24px;">Items in Arsenal</h3>
+            `;
+
+            cart.forEach(item => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image">⛳</div>
+                        <div class="cart-item-info">
+                            <h3>${item.name}</h3>
+                            <div class="cart-item-meta">Unit: $${item.price.toLocaleString()}</div>
+                            <div style="margin-top: 12px;">
+                                <label style="display: inline; margin-right: 8px;">Qty:</label>
+                                <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity(${item.id}, this.value)" style="width: 50px; padding: 4px;">
+                            </div>
+                        </div>
+                        <div class="cart-item-price">
+                            <div class="cart-item-total">$${(item.price * item.quantity).toLocaleString()}</div>
+                            <button class="btn btn-small" onclick="removeFromCart(${item.id})" style="margin-top: 8px; padding: 6px 12px;">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += `
+                    </div>
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>$${subtotal.toLocaleString()}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span>$${shipping.toLocaleString()}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax (8%):</span>
+                            <span>$${Math.round(tax).toLocaleString()}</span>
+                        </div>
+                        <div class="summary-total">
+                            Total: $${Math.round(total).toLocaleString()}
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 24px; padding: 12px;" onclick="showPage('checkout')">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            content.innerHTML = cartHTML;
+        }
+
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName + '-page').classList.add('active');
+            if (pageName === 'cart') {
+                renderCart();
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function submitCheckout(event) {
+            event.preventDefault();
+            const form = document.getElementById('checkout-form');
+            if (!form.checkValidity()) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            cart = [];
+            updateCartBadge();
+            showPage('success');
+        }
+    </script>
+</body>
+</html>
