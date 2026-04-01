@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fairway Girls - Florida Golf Gear</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --turquoise: #00b4cc;
+            --turquoise-light: #e0f7fa;
+            --coral: #ff6b6b;
+            --coral-light: #ffe5e5;
+            --sand: #f9d56e;
+            --sand-light: #fffbf0;
+            --ocean: #0288d1;
+            --ocean-light: #e1f5fe;
+            --tropical-green: #4caf50;
+            --tropical-green-light: #e8f5e9;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--turquoise) 0%, var(--ocean) 100%);
+            color: var(--white);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 180, 204, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--coral);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            padding: 60px 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 20px;
+            color: var(--turquoise);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--sand) 0%, var(--coral-light) 100%);
+            padding: 100px 20px;
+            text-align: center;
+            margin-bottom: 60px;
+            border-radius: 16px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-dark);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            background: var(--turquoise);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--ocean);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 180, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--turquoise);
+            border: 2px solid var(--turquoise);
+        }
+
+        .btn-secondary:hover {
+            background: var(--turquoise-light);
+        }
+
+        .btn-coral {
+            background: var(--coral);
+        }
+
+        .btn-coral:hover {
+            background: #ff5252;
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #f0f0f0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 180, 204, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--turquoise-light) 0%, var(--ocean-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            font-weight: bold;
+        }
+
+        .product-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .product-type {
+            font-size: 12px;
+            color: var(--turquoise);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .product-description {
+            color: var(--text-light);
+            font-size: 13px;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .product-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 12px 0;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+
+        .spec-item {
+            text-align: left;
+        }
+
+        .spec-label {
+            color: var(--text-light);
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            color: var(--turquoise);
+            font-weight: 700;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-size: 24px;
+            color: var(--coral);
+            font-weight: 700;
+        }
+
+        /* Cart */
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+        }
+
+        .cart-items {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px;
+            gap: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            font-size: 48px;
+            text-align: center;
+        }
+
+        .cart-item-info h3 {
+            margin-bottom: 4px;
+        }
+
+        .cart-item-meta {
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        .cart-item-price {
+            text-align: right;
+        }
+
+        .cart-item-total {
+            font-size: 20px;
+            color: var(--coral);
+            font-weight: 700;
+        }
+
+        .cart-summary {
+            background: linear-gradient(135deg, var(--turquoise-light) 0%, var(--ocean-light) 100%);
+            border-radius: 12px;
+            padding: 28px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            border: 2px solid var(--turquoise);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .summary-total {
+            border-top: 2px solid var(--turquoise);
+            padding-top: 16px;
+            margin-top: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ocean);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart p {
+            font-size: 18px;
+            margin-bottom: 24px;
+            color: var(--text-light);
+        }
+
+        /* Checkout Form */
+        .checkout-form {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 700px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section h3 {
+            border-bottom: 2px solid var(--turquoise);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            color: var(--text-dark);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--turquoise);
+            box-shadow: 0 0 12px rgba(0, 180, 204, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .success-message h2 {
+            color: var(--turquoise);
+            margin-bottom: 16px;
+        }
+
+        .success-message p {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin: 60px 0;
+        }
+
+        .feature-box {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            border-left: 4px solid var(--turquoise);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .feature-box h3 {
+            margin-bottom: 8px;
+        }
+
+        .feature-box p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 60px 20px 30px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--turquoise);
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #bbb;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: var(--turquoise);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            font-size: 13px;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">⛳</span>
+                    Fairway Girls
+                </div>
+                <nav class="nav-links">
+                    <a onclick="showPage('home')">Home</a>
+                    <a onclick="showPage('shop')">Shop</a>
+                    <a onclick="showPage('cart')">
+                        Cart
+                        <span class="cart-icon">🛒
+                            <span class="cart-badge" id="cart-count" style="display: none;">0</span>
+                        </span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="hero">
+                <h1>Fairway Girls ☀️</h1>
+                <p>Premium Golf Gear for the Modern Woman Golfer</p>
+                <p style="font-size: 16px; margin-bottom: 32px;">
+                    Play well, look great, have fun in the Florida sun! ⛳
+                </p>
+                <button class="btn btn-secondary" onclick="showPage('shop')">Shop Now</button>
+            </div>
+
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 48px;">Why Choose Fairway Girls?</h2>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon">✨</div>
+                        <h3>Style & Performance</h3>
+                        <p>Premium gear that looks amazing and performs even better on the course.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">☀️</div>
+                        <h3>Florida Designed</h3>
+                        <p>Tested in the Florida heat. Built for comfort, style, and year-round play.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">🏌️</div>
+                        <h3>Women-Focused</h3>
+                        <p>Engineered specifically for women golfers by women golfers. Real expertise.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">🌊</div>
+                        <h3>Quality Materials</h3>
+                        <p>Lightweight, breathable, UV-protected. Ready for anything.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">👯</div>
+                        <h3>Community</h3>
+                        <p>Join thousands of women golfers who love the game and love having fun.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">💚</div>
+                        <h3>Sustainable</h3>
+                        <p>Eco-friendly materials because we care about our planet and our courses.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shop Page -->
+        <div class="page" id="shop-page">
+            <div class="container">
+                <h1>Our Collection</h1>
+                <p class="subtitle">Discover gear designed for your game</p>
+
+                <div class="products-grid">
+                    <div class="product-card" onclick="addToCart(1, 'Coral Dreams Driver', 199)">
+                        <div class="product-image">⛳</div>
+                        <div class="product-content">
+                            <div class="product-type">Driver</div>
+                            <h3 class="product-name">Coral Dreams Driver</h3>
+                            <p class="product-description">Lightweight and forgiving. The perfect driver for consistent distance and accuracy.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Loft</div>
+                                    <div class="spec-value">10.5°</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Distance</div>
+                                    <div class="spec-value">240+ yards</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$199</div>
+                                <button class="btn btn-coral">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(2, 'Ocean Breeze Irons Set', 249)">
+                        <div class="product-image">🎯</div>
+                        <div class="product-content">
+                            <div class="product-type">Irons</div>
+                            <h3 class="product-name">Ocean Breeze Irons</h3>
+                            <p class="product-description">Precision and forgiveness in every stroke. Perfect for women golfers at all levels.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Set</div>
+                                    <div class="spec-value">6-PW</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Material</div>
+                                    <div class="spec-value">Composite</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$249</div>
+                                <button class="btn btn-coral">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(3, 'Turquoise Putter', 139)">
+                        <div class="product-image">🏌️</div>
+                        <div class="product-content">
+                            <div class="product-type">Putter</div>
+                            <h3 class="product-name">Turquoise Putter</h3>
+                            <p class="product-description">Smooth, confident putting. Feel the difference with our award-winning putter design.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Length</div>
+                                    <div class="spec-value">34"</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Style</div>
+                                    <div class="spec-value">Mallet</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$139</div>
+                                <button class="btn btn-coral">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(4, 'Sunset Hybrid', 169)">
+                        <div class="product-image">🌅</div>
+                        <div class="product-content">
+                            <div class="product-type">Hybrid</div>
+                            <h3 class="product-name">Sunset Hybrid</h3>
+                            <p class="product-description">Versatile and easy to hit. Your secret weapon for tough lies and long approach shots.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Loft</div>
+                                    <div class="spec-value">4 Hybrid</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Forgiveness</div>
+                                    <div class="spec-value">High</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$169</div>
+                                <button class="btn btn-coral">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(5, 'Sandy Wedges Set', 129)">
+                        <div class="product-image">💎</div>
+                        <div class="product-content">
+                            <div class="product-type">Wedges</div>
+                            <h3 class="product-name">Sandy Wedges Set</h3>
+                            <p class="product-description">Master your short game with these precision-engineered wedges. Pure contact, every time.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Set</div>
+                                    <div class="spec-value">P, S, L</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Control</div>
+                                    <div class="spec-value">Expert</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$129</div>
+                                <button class="btn btn-coral">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="addToCart(6, 'Palm Tree Stand Bag', 89)">
+                        <div class="product-image">🎒</div>
+                        <div class="product-content">
+                            <div class="product-type">Bag</div>
+                            <h3 class="product-name">Palm Tree Stand Bag</h3>
+                            <p class="product-description">Lightweight and durable. Perfect for walking the course with style and comfort.</p>
+                            <div class="product-specs">
+                                <div class="spec-item">
+                                    <div class="spec-label">Capacity</div>
+                                    <div class="spec-value">14 clubs</div>
+                                </div>
+                                <div class="spec-item">
+                                    <div class="spec-label">Weight</div>
+                                    <div class="spec-value">Ultra-Light</div>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">$89</div>
+                                <button class="btn btn-coral">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Page -->
+        <div class="page" id="cart-page">
+            <div class="container">
+                <h1>Your Cart</h1>
+                <p class="subtitle">Ready to check out?</p>
+
+                <div id="cart-content"></div>
+            </div>
+        </div>
+
+        <!-- Checkout Page -->
+        <div class="page" id="checkout-page">
+            <div class="container">
+                <h1>Checkout</h1>
+                <p class="subtitle">Complete your order</p>
+
+                <div class="checkout-form">
+                    <form id="checkout-form" onsubmit="submitCheckout(event)">
+                        <div class="form-section">
+                            <h3>Shipping Information</h3>
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Email *</label>
+                                    <input type="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone *</label>
+                                    <input type="tel" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Address *</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>City *</label>
+                                    <input type="text" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Zip Code *</label>
+                                    <input type="text" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Payment Information</h3>
+                            <div class="form-group">
+                                <label>Card Number *</label>
+                                <input type="text" required placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry *</label>
+                                    <input type="text" required placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV *</label>
+                                    <input type="text" required placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; padding: 14px; font-size: 16px; margin-top: 32px;">
+                            Complete Purchase
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div class="page" id="success-page">
+            <div class="container">
+                <div class="success-message">
+                    <div class="success-icon">⛳✨</div>
+                    <h2>Order Confirmed!</h2>
+                    <p>Your gear is on the way! Get ready to have an amazing round.</p>
+                    <p style="font-size: 14px; color: var(--text-light); margin-bottom: 32px;">
+                        Order Confirmation Sent to Your Email<br>
+                        Estimated Delivery: 3-5 Business Days
+                    </p>
+                    <button class="btn" onclick="showPage('shop')">Keep Shopping</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <a onclick="showPage('shop')">All Products</a>
+                    <a href="#">New Arrivals</a>
+                    <a href="#">Bestsellers</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Shipping Info</a>
+                    <a href="#">Returns</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <a href="#">Women Golfers</a>
+                    <a href="#">Tips & Tricks</a>
+                    <a href="#">Events</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Terms</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Returns</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Fairway Girls • Premium Golf Gear for Women • Made with ❤️ in Florida</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            updateCartBadge();
+            alert(`${name} added to cart! ☀️`);
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+            updateCartBadge();
+        }
+
+        function updateQuantity(id, quantity) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity = Math.max(1, quantity);
+                renderCart();
+            }
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-count');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderCart() {
+            const content = document.getElementById('cart-content');
+
+            if (cart.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Your cart is empty.</p>
+                        <button class="btn" onclick="showPage('shop')">Start Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 10;
+            const tax = subtotal * 0.07;
+            const total = subtotal + shipping + tax;
+
+            let cartHTML = `
+                <div class="cart-container">
+                    <div class="cart-items">
+                        <h3 style="margin-bottom: 24px;">Items in Cart</h3>
+            `;
+
+            cart.forEach(item => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image">⛳</div>
+                        <div class="cart-item-info">
+                            <h3>${item.name}</h3>
+                            <div class="cart-item-meta">$${item.price}</div>
+                            <div style="margin-top: 12px;">
+                                <label style="display: inline; margin-right: 8px;">Qty:</label>
+                                <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity(${item.id}, this.value)" style="width: 50px; padding: 4px;">
+                            </div>
+                        </div>
+                        <div class="cart-item-price">
+                            <div class="cart-item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+                            <button class="btn btn-coral" onclick="removeFromCart(${item.id})" style="margin-top: 8px; padding: 6px 12px; font-size: 12px;">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += `
+                    </div>
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>$${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span>$${shipping.toFixed(2)}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax:</span>
+                            <span>$${tax.toFixed(2)}</span>
+                        </div>
+                        <div class="summary-total">
+                            Total: $${total.toFixed(2)}
+                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 24px; padding: 12px;" onclick="showPage('checkout')">
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            content.innerHTML = cartHTML;
+        }
+
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName + '-page').classList.add('active');
+            if (pageName === 'cart') {
+                renderCart();
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function submitCheckout(event) {
+            event.preventDefault();
+            const form = document.getElementById('checkout-form');
+            if (!form.checkValidity()) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            cart = [];
+            updateCartBadge();
+            showPage('success');
+        }
+    </script>
+</body>
+</html>
