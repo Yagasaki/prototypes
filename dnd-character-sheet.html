@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D 5e Character Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c1810;
+            --primary-light: #5a3a1a;
+            --accent: #c9a961;
+            --accent-dark: #a67c52;
+            --bg: #f5f1e8;
+            --bg-card: #faf8f3;
+            --border: #d4cec4;
+            --text: #2c1810;
+            --text-light: #6b6b63;
+            --success: #2d5016;
+            --danger: #8b0000;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--accent);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 2px solid var(--accent);
+        }
+
+        .header-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-field label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #daa520;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .header-field input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: bold;
+            padding: 4px 0;
+            font-family: inherit;
+        }
+
+        .header-field input::placeholder {
+            color: rgba(201, 169, 97, 0.5);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .tab-button.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-button:hover {
+            color: var(--accent-dark);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Grid Layouts */
+        .sheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .ability-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .ability-name {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .ability-score {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .ability-modifier {
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Combat Stats */
+        .combat-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            background: white;
+            font-family: inherit;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .skill-item {
+            display: grid;
+            grid-template-columns: 30px 1fr 40px;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .skill-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .skill-modifier {
+            text-align: right;
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 16px;
+        }
+
+        /* Spells */
+        .spell-level {
+            margin-bottom: 24px;
+        }
+
+        .spell-level h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .spells-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .spell-item {
+            display: grid;
+            grid-template-columns: 30px 1fr 100px;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .spell-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .spell-name {
+            font-weight: bold;
+        }
+
+        .spell-slots {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* Equipment */
+        .equipment-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .equipment-item {
+            display: grid;
+            grid-template-columns: 1fr 100px;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .equipment-name {
+            font-weight: bold;
+        }
+
+        .equipment-qty {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        /* Traits and Notes */
+        .traits-box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+            min-height: 100px;
+        }
+
+        .traits-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .traits-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        /* Hit Points */
+        .hp-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .hp-current {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .hp-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .hp-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .hp-input-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .hp-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            text-align: center;
+            font-weight: bold;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                grid-template-columns: 1fr;
+            }
+
+            .hp-section {
+                grid-template-columns: 1fr;
+            }
+
+            .sheet-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tabs {
+                gap: 4px;
+            }
+
+            .tab-button {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+        }
+
+        .print-button {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            font-family: inherit;
+        }
+
+        .print-button:hover {
+            background: var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-top">
+                <div class="header-field">
+                    <label>Character Name</label>
+                    <input type="text" placeholder="Aragorn Strider">
+                </div>
+                <div class="header-field">
+                    <label>Class / Level</label>
+                    <input type="text" placeholder="Ranger / 5">
+                </div>
+                <div class="header-field">
+                    <label>Race / Background</label>
+                    <input type="text" placeholder="Human / Ranger">
+                </div>
+                <div class="header-field">
+                    <label>Alignment</label>
+                    <input type="text" placeholder="Chaotic Good">
+                </div>
+            </div>
+        </header>
+
+        <!-- Print Button -->
+        <button class="print-button" onclick="window.print()">📄 Print Character Sheet</button>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('abilities')">Abilities</button>
+            <button class="tab-button" onclick="switchTab('combat')">Combat</button>
+            <button class="tab-button" onclick="switchTab('skills')">Skills</button>
+            <button class="tab-button" onclick="switchTab('spells')">Spells</button>
+            <button class="tab-button" onclick="switchTab('equipment')">Equipment</button>
+            <button class="tab-button" onclick="switchTab('traits')">Traits & Notes</button>
+        </div>
+
+        <!-- ABILITIES TAB -->
+        <div class="tab-content active" id="abilities">
+            <h2 style="margin-bottom: 20px;">Ability Scores</h2>
+            <div class="sheet-grid">
+                <div class="ability-box">
+                    <div class="ability-name">Strength</div>
+                    <input type="number" class="stat-input" value="16">
+                    <div class="ability-modifier" style="margin-top: 8px;">+3</div>
+                </div>
+                <div class="ability-box">
+                    <div class="ability-name">Dexterity</div>
+                    <input type="number" class="stat-input" value="18">
+                    <div class="ability-modifier" style="margin-top: 8px;">+4</div>
+                </div>
+                <div class="ability-box">
+                    <div class="ability-name">Constitution</div>
+                    <input type="number" class="stat-input" value="14">
+                    <div class="ability-modifier" style="margin-top: 8px;">+2</div>
+                </div>
+                <div class="ability-box">
+                    <div class="ability-name">Intelligence</div>
+                    <input type="number" class="stat-input" value="12">
+                    <div class="ability-modifier" style="margin-top: 8px;">+1</div>
+                </div>
+                <div class="ability-box">
+                    <div class="ability-name">Wisdom</div>
+                    <input type="number" class="stat-input" value="15">
+                    <div class="ability-modifier" style="margin-top: 8px;">+2</div>
+                </div>
+                <div class="ability-box">
+                    <div class="ability-name">Charisma</div>
+                    <input type="number" class="stat-input" value="13">
+                    <div class="ability-modifier" style="margin-top: 8px;">+1</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Saving Throws</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Strength Save</div>
+                        <div class="skill-modifier">+3</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Dexterity Save</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Constitution Save</div>
+                        <div class="skill-modifier">+2</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Intelligence Save</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Wisdom Save</div>
+                        <div class="skill-modifier">+2</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Charisma Save</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMBAT TAB -->
+        <div class="tab-content" id="combat">
+            <h2 style="margin-bottom: 20px;">Combat Stats</h2>
+            
+            <div class="hp-section">
+                <div class="hp-current">
+                    <div class="hp-label">Current Hit Points</div>
+                    <input type="number" class="hp-input" value="36" style="font-size: 32px; width: 100px;">
+                    <div style="font-size: 14px; margin-top: 8px; opacity: 0.8;">/ 36 Maximum</div>
+                </div>
+                <div class="section">
+                    <h3>Temporary HP</h3>
+                    <input type="number" class="stat-input" placeholder="0">
+                </div>
+            </div>
+
+            <div class="combat-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Armor Class</div>
+                    <div class="stat-value">16</div>
+                    <small style="color: var(--text-light);">Leather + DEX</small>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Initiative</div>
+                    <div class="stat-value">+4</div>
+                    <input type="number" class="stat-input" placeholder="Modifier">
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Speed</div>
+                    <div class="stat-value">30 ft</div>
+                    <input type="text" class="stat-input" placeholder="Base movement">
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Proficiency Bonus</div>
+                    <div class="stat-value">+3</div>
+                    <small style="color: var(--text-light);">Level 5</small>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Attacks & Spellcasting</h3>
+                <div class="equipment-grid">
+                    <div class="equipment-item">
+                        <div>
+                            <div class="equipment-name">Longsword</div>
+                            <small style="color: var(--text-light);">+6 to hit, 1d8+4</small>
+                        </div>
+                        <div class="equipment-qty">+6</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div>
+                            <div class="equipment-name">Longbow</div>
+                            <small style="color: var(--text-light);">+6 to hit, 1d8+4</small>
+                        </div>
+                        <div class="equipment-qty">+6</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKILLS TAB -->
+        <div class="tab-content" id="skills">
+            <h2 style="margin-bottom: 20px;">Skills</h2>
+            <div class="section">
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Acrobatics (DEX)</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Animal Handling (WIS)</div>
+                        <div class="skill-modifier">+5</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox" checked>
+                        <div class="skill-name">Arcana (INT)</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Athletics (STR)</div>
+                        <div class="skill-modifier">+3</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox" checked>
+                        <div class="skill-name">Deception (CHA)</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">History (INT)</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Insight (WIS)</div>
+                        <div class="skill-modifier">+5</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Intimidation (CHA)</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox" checked>
+                        <div class="skill-name">Investigation (INT)</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Medicine (WIS)</div>
+                        <div class="skill-modifier">+5</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Nature (INT)</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox" checked>
+                        <div class="skill-name">Perception (WIS)</div>
+                        <div class="skill-modifier">+5</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Performance (CHA)</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Persuasion (CHA)</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Religion (INT)</div>
+                        <div class="skill-modifier">+1</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox" checked>
+                        <div class="skill-name">Sleight of Hand (DEX)</div>
+                        <div class="skill-modifier">+4</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Stealth (DEX)</div>
+                        <div class="skill-modifier">+7</div>
+                    </div>
+                    <div class="skill-item">
+                        <input type="checkbox" class="skill-checkbox">
+                        <div class="skill-name">Survival (WIS)</div>
+                        <div class="skill-modifier">+5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPELLS TAB -->
+        <div class="tab-content" id="spells">
+            <h2 style="margin-bottom: 20px;">Spells</h2>
+            
+            <div class="section">
+                <h3>Spell Slots</h3>
+                <div class="combat-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">1st Level</div>
+                        <input type="number" class="stat-input" value="4">
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">2nd Level</div>
+                        <input type="number" class="stat-input" value="3">
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">3rd Level</div>
+                        <input type="number" class="stat-input" value="2">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="spell-level">
+                    <h4>Cantrips</h4>
+                    <div class="spells-list">
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox" checked>
+                            <div class="spell-name">Fire Bolt</div>
+                            <div class="spell-slots">Cantrip</div>
+                        </div>
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox" checked>
+                            <div class="spell-name">Light</div>
+                            <div class="spell-slots">Cantrip</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spell-level">
+                    <h4>1st Level Spells</h4>
+                    <div class="spells-list">
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox" checked>
+                            <div class="spell-name">Magic Missile</div>
+                            <div class="spell-slots">4 slots</div>
+                        </div>
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox">
+                            <div class="spell-name">Identify</div>
+                            <div class="spell-slots">4 slots</div>
+                        </div>
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox" checked>
+                            <div class="spell-name">Mage Armor</div>
+                            <div class="spell-slots">4 slots</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spell-level">
+                    <h4>2nd Level Spells</h4>
+                    <div class="spells-list">
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox">
+                            <div class="spell-name">Scorching Ray</div>
+                            <div class="spell-slots">3 slots</div>
+                        </div>
+                        <div class="spell-item">
+                            <input type="checkbox" class="spell-checkbox" checked>
+                            <div class="spell-name">Misty Step</div>
+                            <div class="spell-slots">3 slots</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EQUIPMENT TAB -->
+        <div class="tab-content" id="equipment">
+            <h2 style="margin-bottom: 20px;">Equipment & Inventory</h2>
+            
+            <div class="section">
+                <h3>Worn Equipment</h3>
+                <div class="equipment-grid">
+                    <div class="equipment-item">
+                        <div class="equipment-name">Leather Armor</div>
+                        <div class="equipment-qty">AC 11+DEX</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="equipment-name">Longsword</div>
+                        <div class="equipment-qty">1</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="equipment-name">Longbow</div>
+                        <div class="equipment-qty">1</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="equipment-name">Quiver of Arrows</div>
+                        <div class="equipment-qty">20</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Backpack</h3>
+                <div class="equipment-grid">
+                    <div class="equipment-item">
+                        <div class="equipment-name">Bedroll</div>
+                        <div class="equipment-qty">1</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="equipment-name">Rope, 50 feet</div>
+                        <div class="equipment-qty">1</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="equipment-name">Waterskin</div>
+                        <div class="equipment-qty">2</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="equipment-name">Rations (10 days)</div>
+                        <div class="equipment-qty">10</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Treasure</h3>
+                <div class="combat-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Gold Pieces</div>
+                        <input type="number" class="stat-input" value="145">
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Silver Pieces</div>
+                        <input type="number" class="stat-input" value="23">
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Copper Pieces</div>
+                        <input type="number" class="stat-input" value="8">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRAITS & NOTES TAB -->
+        <div class="tab-content" id="traits">
+            <h2 style="margin-bottom: 20px;">Character Details</h2>
+            
+            <div class="section">
+                <h3>Personality Traits</h3>
+                <textarea class="traits-input" placeholder="How does your character act and behave?">Cautious and observant. Takes time to trust others. Speaks sparingly but wisely.</textarea>
+            </div>
+
+            <div class="section">
+                <h3>Ideals</h3>
+                <textarea class="traits-input" placeholder="What does your character believe in?">Protection. Those who cannot protect themselves deserve aid.</textarea>
+            </div>
+
+            <div class="section">
+                <h3>Bonds</h3>
+                <textarea class="traits-input" placeholder="What does your character care about?">The safety of the realm. The honor of the Rangers. An old promise to a friend.</textarea>
+            </div>
+
+            <div class="section">
+                <h3>Flaws</h3>
+                <textarea class="traits-input" placeholder="What weaknesses does your character have?">Haunted by failures of the past. Difficulty opening up to others. Isolates himself.</textarea>
+            </div>
+
+            <div class="section">
+                <h3>Features & Traits</h3>
+                <textarea class="traits-input" placeholder="Racial traits, class features, and special abilities...">Ranger: Favored Enemy (Undead), Favored Terrain (Forest), Fighting Style (Two-Weapon Fighting)</textarea>
+            </div>
+
+            <div class="section">
+                <h3>Notes</h3>
+                <textarea class="traits-input" placeholder="Campaign notes, party relationships, ongoing quests...">Searching for the source of the corruption spreading through the eastern forests...</textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
